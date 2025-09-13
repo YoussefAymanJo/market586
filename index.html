@@ -1,0 +1,1506 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>سوقلى</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+      line-height: 1.8;
+      direction: rtl;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* --- وضع داكن --- */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .content {
+      background-color: #1e1e1e;
+      box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode header {
+      background-color: #1e402a;
+    }
+
+    body.dark-mode .content h2,
+    body.dark-mode .content h3 {
+      color: #86efac;
+    }
+
+    body.dark-mode .content a {
+      color: #86efac;
+    }
+
+    body.dark-mode .sidebar {
+      background-color: #2a2a2a;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .sidebar button:hover {
+      background-color: #444;
+    }
+
+    body.dark-mode .section-loader .text,
+    body.dark-mode .loader-text {
+      color: #86efac;
+    }
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: #f4f4f4;
+  padding: 20px;
+  position: fixed;
+  left: -250px; /* مخفية ابتدائياً */
+  top: 0;
+  transition: left 0.3s;
+  z-index: 1000;
+}
+
+.sidebar.active {
+  left: 0; /* تظهر عند التفعيل */
+}
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  text-align: dir;
+  cursor: pointer;
+}
+
+.submenu .submenu-toggle {
+  background-color: #0bc148;
+  color: white;
+  font-weight: bold;
+}
+
+.submenu-items {
+  display: none; /* مخفية ابتدائياً */
+  margin-right: 10px;
+}
+
+.submenu-items button {
+  background-color: #f9f9f9;
+  font-size: 0.9em;
+}
+    /* --- شاشة التحميل الأولية --- */
+    .loader-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out, visibility 0s 0.5s;
+    }
+
+    .loader-container.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader {
+      width: 60px;
+      height: 60px;
+      border: 5px solid #e9ecef;
+      border-top: 5px solid #28a745;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    .loader-text {
+      font-size: 1.1rem;
+      color: #28a745;
+      font-weight: 500;
+    }
+
+    /* --- Loader داخلي لكل قسم --- */
+    .section-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      text-align: center;
+    }
+
+    .section-loader .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e9ecef;
+      border-top: 4px solid #28a745;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    .section-loader .text {
+      font-size: 1rem;
+      color: #28a745;
+    }
+   input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    .iframe-container {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+    .iframe-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    /* accordion*/
+  /*.accordion {
+      max-width: 700px;
+      margin: 30px auto;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .accordion-item {
+      background-color: #ffffff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .accordion-header {
+      background-color: #3498db;
+      color: white;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      border: none;
+      text-align: right;
+      outline: none;
+      transition: background-color 0.3s;
+    }
+
+    .accordion-header:hover {
+      background-color: #2980b9;
+    }
+
+    .accordion-content {
+      padding: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      max-height: 0;
+    }
+
+    .accordion-content p {
+      padding: 15px 20px;
+      margin: 0;
+      background-color: #f8f9fa;
+      border-top: 1px solid #eee;
+    }
+
+   */
+    .accordion-header::after {
+      content: '+';
+      float: left;
+      font-size: 1.4rem;
+    }
+
+    .accordion-header.active::after {
+      content: '−';
+    }
+
+   /* .accordion-header.active {
+      background-color: #2980b9;
+    }*/
+   /* accordion*/
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* الهيدر */
+    header {
+      background-color: #28a745;
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+     /* background-image:  url('1.png');*/
+    }
+
+    /* زر الوضع الداكن */
+    #darkModeToggle {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      background: #333;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    /* القائمة الجانبية */
+    .sidebar {
+      background-color: #343a40;
+      color: white;
+      width: 100%;
+      max-width: 300px;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      right: -300px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      padding-top: 80px;
+      overflow-y: auto;
+      border-left: 1px solid #495057;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .sidebar button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: none;
+      border: none;
+      color: #fff;
+      text-align: right;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-bottom: 1px solid #495057;
+    }
+
+    .sidebar button:hover {
+      background-color: #495057;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* زر القائمة */
+    .menu-toggle {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* المحتوى */
+    .content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      min-height: 300px;
+    }
+
+    .content h2 {
+      color: #28a745;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 10px;
+    }
+
+    .content h3 {
+      color: #155724;
+      margin: 15px 0 10px;
+    }
+
+    .content p,
+    .content ul,
+    .content ol {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .content ul li,
+    .content ol li {
+      margin: 6px 0;
+    }
+
+    .content a {
+      color: #28a745;
+      text-decoration: underline;
+    }
+
+    .content a:hover {
+      color: #1e7e34;
+    }
+label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #29b94a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #29b94a;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #3498db;
+      background-color: #ecf9ff;
+      border-radius: 4px;
+      font-size: 18px;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    /* استجابة */
+    @media (min-width: 768px) {
+      .sidebar {
+        right: 0;
+        position: static;
+        width: 280px;
+        float: right;
+        height: auto;
+        margin-right: 15px;
+      }
+      .overlay {
+        display: none !important;
+      }
+      .menu-toggle {
+        display: none;
+      }
+      .container {
+        display: flex;
+      }
+      .main-content {
+        flex: 1;
+        margin-right: 15px;
+      }
+
+    }
+    /* دراسة الجدوى*/
+     table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #005a32;
+      color: white;
+    }
+    .editable {
+      background-color: #fff9c4; /* Yellow for editable cells */
+      font-weight: bold;
+    }
+    .result4 {
+      font-weight: bold;
+      background-color: #e8f5e8;
+    }
+    .formula {
+      background-color: #d1f7d1;
+      padding: 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      direction: rtl;
+      text-align: right;
+      font-size: 14px;
+      margin: 5px 0;
+      font-weight: bold;
+    }
+
+    .highlight {
+      background-color: #fffacd;
+      padding: 2px 6px;
+      font-weight: bold;
+    }
+    .results2 {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #e8f5e9;
+      border-radius: 8px;
+      border-right: 5px solid #28a745;
+    }
+
+    .results2 h3 {
+      color: #155724;
+      border-bottom: 1px dashed #28a745;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <!-- شاشة التحميل الأولية -->
+  <div class="loader-container" id="loader">
+    <div class="loader"></div>
+    <div class="loader-text">جاري تحميل الموقع...</div>
+  </div>
+
+  <div class="container">
+    <!-- الهيدر -->
+    <header>
+      <h1>🌱 سوقلى</h1>
+      <p>دعمك للوصول لأعلى ربحية من بيع منتجاتك الزراعية</p>
+      <button id="darkModeToggle">🌙 داكن</button>
+    </header>
+
+    <!-- زر القائمة (في الجوال) -->
+<button class="menu-toggle" onclick="toggleSidebar()">☰ القائمة</button>
+
+<!-- القائمة الجانبية -->
+<div class="sidebar" id="sidebar">
+  <button onclick="loadSection('home')">الصفحة الرئيسية</button>
+    <button onclick="loadSection('recom')">التوصيات</button>
+    <button onclick="loadSection('mark')">التسويق</button>
+ 
+  <button onclick="loadSection('financial')">دراسة جدوى الاقتصادية</button>
+  <button onclick="loadSection('faq')">الاستفسارات</button>
+    <button onclick="loadSection('market-prices')">أسعار السوق</button>
+ <!-- <button onclick="loadSection('feasibility')">التحليل المالي</button>-->
+  <button onclick="loadSection('aboutus')">عن النظام</button>
+</div>
+
+    <!-- الشفافية عند فتح القائمة في الجوال -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content" id="main-content">
+      <div class="content" id="dynamic-content">
+        <!-- سيتم تعبئته ديناميكيًا -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // محتوى كل قسم
+    const sections = {
+      home: `
+        <h2>مرحبًا بك في سوقلى </h2>
+        <p>سوقلى  يهتم بدعم المزارعين في العملية التسويقية لمنتجاتهم لتحقيق أعلى ربحية من بيع منتجاتهم.وذلك عن طريق إمداد المزارع بمجموعة من الإرشادات التي تساعد على تسويق المنتجات بأساليب حديثة.</p>
+        <p>وتُعد هذه النسخة إصدارًا تجريبيًا من <strong> سوقلى</strong>. نرحب بملاحظاتك لتحسين الخدمة.</p>
+        <p>استخدم القائمة لاستكشاف النصائح والإرشادات التسويقية، واطلع على الفرص المتاحة، واسعر السوق، والأسعار التعاقدية.</p>
+ <p>
+       <h2 >الأجنده الأسبوعية </h2>
+            <strong>التسميد</strong>
+            فى ٢٠ مارس يتم أضافة الدفعة الثانية من  نترات نشادر 200 كجم
+            </p>
+       <p>        <h2>تنبيهات مناخية</h2>
+            من المتوقع أن يكون الطقس حارًا إلى شديد الحراره مع رطوبة عالية في الأيام القادمة، لذا قم بالرش كإجراء وقائي ضد البياض الدقيقى.
+            </p>
+
+
+        <p>ابدأ الآن بالضغط على أحد الأقسام!</p>
+
+
+
+      `,
+
+      recom: `
+        <h2>التوصيات </h2>
+      <h2 >الأجنده الأسبوعية </h2>
+            <strong>التسميد</strong>
+            فى ٢٠ مارس يتم أضافة الدفعة الثانية من  نترات نشادر 200 كجم
+            <br>
+             <strong>تنفيذ</strong>  ----  <strong>تعديل</strong>
+                    
+            <br>
+            </p>
+       <p>        <h2>تنبيهات مناخية</h2>
+            من المتوقع أن يكون الطقس حارًا إلى شديد الحراره مع رطوبة عالية في الأيام القادمة، لذا قم بالرش كإجراء وقائي ضد البياض الدقيقى.
+                  <br>
+              <strong>تنفيذ</strong>  ----  <strong>تعديل</strong>
+            <br>  </p>
+
+
+        <p>أضغط على تنفيذ لتخرين العمليه ، او تعديل لتعديل البيانات قبل التخزين</p>
+
+
+
+      `,
+
+      mark: `
+        <h2>ارشادات تسويقية </h2>
+        <p>اختر احد الفرص التالية
+            </p>
+
+                 <div class ="accordion">
+
+         <!-- 1 -->
+         <div class ="accordion-item">
+
+         <button class ="accordion-header" onclick="showDiv(1)" width="100%">بيع إنتاجك بالسوق المحلى</button>
+         <div class ="accordion-content" style="display: none;" id="R1">
+           <p>
+           توجد العديد من الفرص التسويقية يمكنك الاستفادة منها:
+           </p>
+           <ol>
+             <li>توريد بنجر السكر بسعر 2000 جنيه/طن</li>
+             <li>توريد المنتج للمطاعم وسلاسل السوبر ماركت </li>
+                   </ol>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class ="accordion-item">
+         <button class ="accordion-header" onclick="showDiv(2)" width="100%">التصدير للخارج </button>
+        <div class ="accordion-content" id="R2" style="display: none;" >
+         <p>في حالة التصدير، يجب اتباع الشروط التالية: </p>
+       <ol>
+          <li>
+
+مطابقة مواصفات الدولة المستوردة من حيث الحجم، الوزن، ووجود شهادات الاعتماد.</li>
+             <li>
+جودة مواد التعبئة: يجب أن تكون جديدة، نظيفة، قوية، وآمنة من التلوث أو الروائح الضارة.</li>
+             <li>
+توحيد حجم الثمار داخل كل عبوة ووزن العبوة.</li>
+             <li>
+توفير فتحات تهوية مناسبة لتجنب التعفن.</li>
+             <li>
+استخدام أوراق مانعة للرطوبة أو أكياس شبكية داخل الكراتين.</li>
+             <li>
+التغليف الفردي (كل ثمرة ملفوفة بورق شمعي) في بعض الحالات.</li>
+             <li>
+وضع بطاقة بيانات تحتوي على:
+اسم المنتج ونوعه - بلد المنشأ - الوزن الصافي- اسم وعنوان المصدر - تاريخ التعبئة- الباركود
+</li>
+             <li>
+الاطلاع على المواصفات القياسية من هيئة سلامة الغذاء والحجر الزراعي.</li>
+
+         </ol>
+       </div>
+        <!-- 3-->
+        <div class ="accordion-item">
+         <button class ="accordion-header" onclick="showDiv(3)" width="100%">تحويل محصولك إلى منتج قابل للتسويق</button>
+        <div class ="accordion-content" id="R3" style="display: none;" >
+<p>
+        لتحويل محصولك إلى منتج قابل للتسويق</p>
+         <ol>
+          <li>
+          يمكنك تخفيف محصول الطماطم وتصديرها بعد ذلك.والتالى طريقه التجفيف</li>
+             <li>
+        اغسل الطماطم جيداً وقطعها إلى شرائح سمكها حوالي نصف سم</li>
+             <li>
+         افرد الشرائح على صوانٍ أو شبكات نظيفة، ورشها بالملح</li>
+             <li>
+        ضع الصواني في الشمس خلال النهار، واجمعها ليلاً لحمايتها من الرطوبة</li>
+             <li>
+        .........
+</li>
+         </ol>
+       </div>
+
+      </div>
+    </div>
+
+
+   
+
+
+
+      `,
+      display: `
+        <h2>كيفية عرض المنتجات</h2>
+        <p>لعرض المحصول بشكل جيد، يجب تجهيزه جيدًا وتعبئته بعناية:</p>
+        <ul>
+          <li>فرز المحصول وإزالة الثمار التالفة أو غير المناسبة.</li>
+          <li>توحيد الحجم قدر الإمكان لزيادة الجاذبية البصرية.</li>
+          <li>وضع بطاقة لكل منتج تحتوي على:</li>
+          <ul>
+            <li>اسم المنتج</li>
+            <li>الوزن</li>
+            <li>تاريخ الحصاد</li>
+            <li>السعر</li>
+            <li>مميزات المنتج (طازج، عضوي، خالٍ من المبيدات)</li>
+            <li>رقم التليفون، واتساب، أو رابط الفيسبوك</li>
+          </ul>
+          <li>استخدام طرق العرض الحديثة:</li>
+          <ul>
+            <li>التسويق عبر مواقع التواصل الاجتماعي (فيسبوك، تيك توك، إنستجرام)</li>
+            <li>إنشاء موقع بسيط للمزرعة يعرض المنتجات والأسعار وطرق التواصل</li>
+          </ul>
+        </ul>
+      `,
+
+      packaging: `
+        <h2>التعبئة والتغليف</h2>
+        <p>في حالة التصدير، يجب اتباع الشروط التالية:</p>
+        <ol>
+          <li>مطابقة مواصفات الدولة المستوردة من حيث الحجم، الوزن، ووجود شهادات الاعتماد.</li>
+          <li>جودة مواد التعبئة: يجب أن تكون جديدة، نظيفة، قوية، وآمنة من التلوث أو الروائح الضارة.</li>
+          <li>توحيد حجم الثمار داخل كل عبوة ووزن العبوة.</li>
+          <li>توفير فتحات تهوية مناسبة لتجنب التعفن.</li>
+          <li>استخدام أوراق مانعة للرطوبة أو أكياس شبكية داخل الكراتين.</li>
+          <li>التغليف الفردي (كل ثمرة ملفوفة بورق شمعي) في بعض الحالات.</li>
+          <li>وضع بطاقة بيانات تحتوي على:</li>
+          <ul>
+            <li>اسم المنتج ونوعه</li>
+            <li>بلد المنشأ</li>
+            <li>الوزن الصافي</li>
+            <li>اسم وعنوان المصدر</li>
+            <li>تاريخ التعبئة</li>
+            <li>الباركود</li>
+          </ul>
+          <li>الاطلاع على المواصفات القياسية من <strong>هيئة سلامة الغذاء والحجر الزراعي</strong>.</li>
+        </ol>
+      `,
+
+      branding: `
+        <h2>وضع علامة تجارية</h2>
+        <p>لبناء علامة تجارية مميزة للمزرعة، اتبع الخطوات التالية:</p>
+        <ul>
+          <li>اختر اسمًا مميزًا وقصيرًا يسهل تذكره.</li>
+          <li>صمم شعارًا بسيطًا يعبر عن الزراعة أو الاستدامة.</li>
+          <li>استخدم ألوانًا وخطوطًا متناسقة في جميع عبواتك ومنشوراتك.</li>
+          <li>أضف شعارًا نصيًا جذابًا مثل:</li>
+          <ul>
+            <li>"من أرضنا إليك مباشرة"</li>
+            <li>"غذائك بدون كيماويات"</li>
+            <li>"طازج يوميًا من المزرعة"</li>
+          </ul>
+        </ul>
+        <p>العلامة التجارية تبني الثقة وتجعل منتجك مميزًا في السوق.</p>
+      `,
+      storage: `
+         <h2>التخزين والنقل</h2>
+        <p>التخزين والنقل الجيد يحافظ على جودة المحاصيل ويقلل الفاقد.</p>
+
+        <h3>تخزين ونقل البطاطس للتصدير:</h3>
+        <ul>
+          <li>بعد الفرز والتعبئة، يُخزن في عنبر تبريد بدرجة حرارة منخفضة ورطوبة 90-95%.</li>
+          <li>توفير تهوية جيدة لمنع تراكم الرطوبة والأعفان.</li>
+          <li>استخدام أكياس ورقية أو حاويات مفتوحة.</li>
+          <li>النقل بشاحنات مبردة مع تهوية وإضاءة كافية وتغطية جيدة.</li>
+        </ul>
+
+        <h3>تخزين المحاصيل البستانية:</h3>
+        <ul>
+          <li>يتم التخزين في مخازن مبردة بدرجة حرارة منخفضة.</li>
+          <li>البرودة تقلل من سرعة تنفس الثمار وتقلل الفقد في الوزن.</li>
+          <li>تؤخر التلف وتمدد فترة الصلاحية.</li>
+        </ul>
+      `,
+      //<label for="temp">درجة الحرارة (مئوية):</label>
+        //  <input type="number" id="temp" step="0.1" placeholder="مثال: 14" />
+         // <label for="humidity">الرطوبة النسبية (%):</label>
+         // <input type="number" id="humidity" placeholder="مثال: 88" />
+          //<button onclick="calculateStorage()">احسب فترة التخزين</button>
+      storageperiod: `
+        <h2>فترة التخزين</h2>
+        <p>التخزين الجيد يحافظ على جودة الثمار ويقلل الفاقد. اختر المحصول من القائمة لعرض شروط التخزين:</p>
+
+        <div style="margin: 20px 0;">
+          <label for="crop" style="display: block; margin-bottom: 8px; font-weight: 500;">اختر المحصول:</label>
+          <select id="crop" onchange="calculateStorage()" style="padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+             <option value="">-- اختر --</option>
+             <option value="الموز">الموز</option>
+             <option value="الليمون">الليمون</option>
+             <option value="المانجو">المانجو</option>
+             <option value="الجوافة">الجوافة</option>
+             <option value="اليوسفى">اليوسفى</option>
+             <option value="البرتقال">البرتقال</option>
+             <option value="التفاح المستورد">التفاح المستورد</option>
+              <option value="التفاح البلدى">التفاح البلدى</option>
+             <option value="التين">التين</option>
+               <option value="البلح الطازج">البلح الطازج</option>
+              <option value="الخوخ">الخوخ</option>
+            <option value="العنب">العنب</option>
+             <option value="الكمثرى">الكمثرى</option>
+          </select>
+          
+         
+          <div id="result" class="result"></div>
+        </div>
+
+      `,
+
+      digital: `
+        <h2>التسويق الرقمي (وسائل التواصل الاجتماعي)</h2>
+        <ol>
+          <li>اختر المنصات الأكثر استخدامًا: الفيسبوك، الواتساب، التيك توك.</li>
+          <li>عرض المنتج بصور وفيديوهات عالية الجودة تُظهر مراحل النمو والحصاد.</li>
+          <li>الرد السريع على العملاء وتشجيع التفاعل.</li>
+          <li>نشر منشورات حول فوائد المحصول وطرق استخدامه.</li>
+          <li>تطبيق سياسة خصومات للطلبات الكبيرة، خاصة للمطاعم وسلاسل السوبر ماركت.</li>
+        </ol>
+      `,
+
+      target: `
+        <h2>الجمهور المستهدف</h2>
+        <p>لنجاح التسويق، يجب تحديد الجمهور المستهدف:</p>
+        <ul>
+          <li>المستهلك المباشر (البيع من المزرعة أو عبر الإنترنت)</li>
+          <li>المتاجر الكبرى (سلاسل السوبر ماركت، المطاعم)</li>
+          <li>التصدير (الشركات المستوردة في الخارج)</li>
+        </ul>
+        <p>تحديد الجمهور يساعدك على:</p>
+        <ul>
+          <li>فهم احتياجاته</li>
+          <li>تحسين جودة المنتج حسب متطلباته</li>
+          <li>وضع خطة تسويقية دقيقة</li>
+        </ul>
+      `,
+
+      plan: `
+        <h2>وضع خطة تسويقية مناسبة</h2>
+        <p>خطة تسويقية ناجحة تشمل:</p>
+        <ul>
+          <li>تحديد المحصول والكمية المنتجة.</li>
+          <li>تحليل السوق والأسعار الحالية.</li>
+          <li>اختيار قناة توزيع (مباشر، تعاقد، تصدير).</li>
+          <li>تحديد ميزانية للتسويق (صور، دعاية، توصيل).</li>
+          <li>تحديد مواعيد البيع وفقًا لموسم السوق.</li>
+          <li>مراقبة النتائج وتعديل الخطة حسب الحاجة.</li>
+        </ul>
+      `,
+
+      feasibility: `
+        <h2>  التحليل المالى</h2>
+        <p>يمكنك الاطلاع على دراسة الجدوى الاقتصادية من ملف الجدوى المرفق.</p>
+        <p>تشمل الدراسة:</p>
+        <ul>
+          <li>تكلفة الإنتاج (بذور، مياه، أسمدة، عمالة)</li>
+          <li>الإنتاج المتوقع (طن/فدان)</li>
+          <li>السعر المتوقع في السوق</li>
+          <li>الربح الصافي</li>
+          <li>تحليل المخاطر (مناخ، أسعار، منافسة)</li>
+        </ul>
+        <p><em>ملاحظة: سيتم توفير نموذج قابل للتحميل قريبًا.</em></p>
+      `,
+/* <p><a href="http://www.oboormarket.org.eg/Prices_ar.aspx" target="_blank">سوق العبور - الأسعار اليومية</a></p>*/
+      "market-prices": `
+        <h2>أسعار السوق</h2>
+        <p>يمكنك الاطلاع على الأسعار الحالية للخضروات والفاكهة من خلال موقع سوق العبور:</p>
+        <p>ننصح بالاطلاع اليومي على الأسعار لاتخاذ قرارات بيع مناسبة.</p>
+        <div class="iframe-container">
+        <iframe src="http://www.oboormarket.org.eg/Prices_ar.aspx" frameborder="0"  title="سوق العبور - الأسعار اليومية"></iframe>
+        </div>
+      `,
+
+      "contract-prices": `
+        <h2>الأسعار التعاقدية للمحاصيل</h2>
+        <p>الأسعار التعاقدية المعلنة من الزراعة التعاقدية بوزارة الزراعة:</p>
+        <ul>
+          <li><strong>القمح (موسم 2025/2026):</strong></li>
+          <ul>
+            <li>2250 جنيه/أردب (درجة نظافة 22.5)</li>
+            <li>2300 جنيه/أردب (درجة نظافة 23)</li>
+            <li>2350 جنيه/أردب (درجة نظافة 23.5)</li>
+          </ul>
+          <li><strong>قصب السكر (2025/2026):</strong> 2500 جنيه/طن</li>
+          <li><strong>بنجر السكر (2025/2026):</strong> 2000 جنيه/طن</li>
+        </ul>
+        <p>التاريخ: 27 أغسطس 2025</p>
+      `,
+
+      opportunities: `
+        <h2>الفرص التسويقية</h2>
+        <p>توجد العديد من الفرص التسويقية يمكنك الاستفادة منها:</p>
+
+        <h3>أولًا: توريد للمزارع</h3>
+        <ul>
+          <li>توريد القمح لموسم 2025/2026</li>
+          <li>توريد قصب السكر بسعر 2500 جنيه/طن</li>
+          <li>توريد بنجر السكر بسعر 2000 جنيه/طن</li>
+        </ul>
+
+        <h3>ثانيًا: تصدير للموسم 2025-2026</h3>
+        <ul>
+          <li>البرتقال</li>
+          <li>البطاطس</li>
+        </ul>
+        <p>استغل هذه الفرص لضمان بيع منتجاتك بسعر ثابت وبدون تقلبات السوق.</p>
+      `,
+
+      faq: `
+        <h2>الاستفسارات</h2>
+         
+         <div class="accordion">
+
+         <!-- السؤال 1 -->
+         <div class="accordion-item">
+       
+         <button class="accordion-header" onclick="showDiv(1)" width="100%">ما هي أساليب التسويق؟</button>
+         <div class="accordion-content" style="display: none;" id="R1">
+           <p>أهم أساليب التسويق الحديثة:</p>
+           <ol>
+             <li>التسويق عبر المنصات الرقمية (فيسبوك، إنستجرام، تيك توك)</li>
+              <li>إنشاء موقع إلكتروني أو متجر إلكتروني</li>
+              <li>الانضمام إلى الأسواق الإلكترونية الزراعية</li>
+              <li>التعاقد مع مطاعم وفندق وشركات أغذية</li>
+              <li>البيع بالجملة للتجار أو المصانع</li>
+              <li>البيع المباشر من المزرعة للمستهلك (Farm-to-Table)</li>
+              <li>إنشاء منافذ بيع صغيرة</li>
+              <li>المشاركة في المعارض الزراعية</li>
+           </ol>
+          </div>
+        </div>
+
+        <!-- السؤال 2 -->
+        <div class="accordion-item">
+         <button class="accordion-header" onclick="showDiv(2)" width="100%">ما هي شروط تصدير البطاطس؟</button>
+        <div class="accordion-content" id="R2" style="display: none;" >
+         <ol>
+          <li>خضوع المنطقة للتفتيش للتأكد من خلوها من العفن البني.</li>
+          <li>فحص التقاوي المعتمدة دوليًا قبل الزراعة.</li>
+          <li>اعتماد الأرض ضمن المناطق الخالية من العفن البني.</li>
+          <li>فحص الشحنات قبل التصدير عبر الموانئ.</li>
+          <li>ألا تقل المساحة المزروعة عن 50 فدانًا لكل بيفوت.</li>
+         </ol>
+       </div>
+      </div>
+    </div> 
+          `,
+     
+      
+
+      financial: `
+       
+    <h1> دراسة الجدوى</h1>
+
+    <table id="calculator">
+    <thead>
+      <tr>
+        <th>البند</th>
+        <th>الكمية</th>
+        <th>السعر المتوقع</th>
+        <th>إجمالي التكلفة / الإيراد</th>
+        <th>الوحدة</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Costs -->
+      <tr>
+        <td>تكلفة الايجار</td>
+        <td><input id="qty1" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price1" type="number" class="price editable" value="12000" onchange="calculateAll()"></td>
+        <td class="cost">12000</td>
+        <td>جنيه/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة تحضير الارض</td>
+        <td><input id="qty2" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price2" type="number" class="price editable" value="2000" onchange="calculateAll()"></td>
+        <td class="cost">2000</td>
+        <td>ساعة/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة البذور/الشتلات</td>
+        <td><input id="qty3" type="number" class="qty editable" value="3" onchange="calculateAll()"></td>
+        <td><input id="price3" type="number" class="price editable" value="500" onchange="calculateAll()"></td>
+        <td class="cost">1500</td>
+        <td>كيلو/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة المبيدات</td>
+        <td><input  id="qty4" type="number" class="qty editable" value="5" onchange="calculateAll()"></td>
+        <td><input id="price4" type="number" class="price editable" value="100" onchange="calculateAll()"></td>
+        <td class="cost">500</td>
+        <td>لتر/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة الاسمدة الازوتية</td>
+        <td><input id="qty5" type="number" class="qty editable" value="3" onchange="calculateAll()"></td>
+        <td><input id="price5" type="number" class="price editable" value="450" onchange="calculateAll()"></td>
+        <td class="cost">1350</td>
+        <td>شكارة/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة الاسمدة الفوسفاتية</td>
+        <td><input id="qty6" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price6" type="number" class="price editable" value="900" onchange="calculateAll()"></td>
+        <td class="cost">900</td>
+        <td>شكارة/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة الاسمدة البوتاسية</td>
+        <td><input id="qty7" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price7" type="number" class="price editable" value="500" onchange="calculateAll()"></td>
+        <td class="cost">500</td>
+        <td>شكارة/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة العمالة</td>
+        <td><input id="qty8" type="number" class="qty editable" value="23" onchange="calculateAll()"></td>
+        <td><input  id="price8" type="number" class="price editable" value="200" onchange="calculateAll()"></td>
+        <td class="cost">4600</td>
+        <td>عامل/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة الري</td>
+        <td><input id="qty9" type="number" class="qty editable" value="4" onchange="calculateAll()"></td>
+        <td><input id="price9" type="number" class="price editable" value="150" onchange="calculateAll()"></td>
+        <td class="cost">600</td>
+        <td>ساعة/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة الحصاد</td>
+        <td><input id="qty10" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price10" type="number" class="price editable" value="1000" onchange="calculateAll()"></td>
+        <td class="cost">1000</td>
+        <td>جنيه/فدان</td>
+      </tr>
+      <tr>
+        <td>تكلفة نقل المجصول</td>
+        <td><input id="qty11" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price11" type="number" class="price editable" value="350" onchange="calculateAll()"></td>
+        <td class="cost">350</td>
+        <td>جنيه/فدان</td>
+      </tr>
+
+      <!-- Revenues -->
+      <tr>
+        <td>الانتاج الرئيسي (طن أو أردب)</td>
+        <td><input id="qty12" type="number" class="qty editable" value="2" onchange="calculateAll()"></td>
+        <td><input id="price12" type="number" class="price editable" value="15000" onchange="calculateAll()"></td>
+        <td class="revenue">30000</td>
+        <td>أردب/فدان</td>
+      </tr>
+      <tr>
+        <td>الانتاج الثانوي</td>
+        <td><input id="qty13" type="number" class="qty editable" value="1" onchange="calculateAll()"></td>
+        <td><input id="price13" type="number" class="price editable" value="4000" onchange="calculateAll()"></td>
+        <td class="revenue">4000</td>
+        <td>حمل/فدان</td>
+      </tr>
+
+      <!-- Summary -->
+      <tr>
+        <td><strong>التكاليف الثابتة</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="fixedCost">12000</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>التكاليف المتغيرة</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="variableCost">13300</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><strong>إجمالي التكاليف</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="totalCost">25300</td>
+        <td>إجمالي ما يتم إنفاقة منذ بداية الزراعة وحتي الحصاد ونقل المحصول</td>
+      </tr>
+      <tr>
+        <td><strong>إجمالي الايرادات</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="totalRevenue">34000</td>
+        <td>إجمالي الايرادات التي يتحصل عليها المزارع من بيع المحصول الرئيسي والمحصول الثانوي</td>
+      </tr>
+      <tr>
+        <td><strong>صافي الربح</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="netProfit">8700</td>
+        <td>الفرق بين ما تم إنفاقة وما حصل عليه المزارع، إذا كان موجب يعني مكسب، وإذا كان سالب يعني خسارة</td>
+      </tr>
+      <tr>
+        <td><strong>معامل الكفاءة الاقتصادية</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="efficiencyRatio">1.3439</td>
+        <td>كل جنيه صرفته رجّعلك كام</td>
+      </tr>
+      <tr>
+        <td><strong>العائد لكل جنيه تكلفة</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="returnPerPound">0.3439</td>
+        <td>كل جنيه صرفته كسبني كام</td>
+      </tr>
+      <tr>
+        <td><strong>تكلفة إنتاج الأردب</strong></td>
+        <td colspan="2"></td>
+        <td class="result4" id="costPerUnit">12650</td>
+        <td>تكلفة إنتاج الطن أوالأردب</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="notes">
+    <strong>ملاحظة:</strong> الأرقام الموجودة في الخلايا الصفراء هي أرقام افتراضية لتيسير إجراء العمليات الحسابية فقط، بعد ذلك سوف نعتمد على الأرقام الواردة من المزارع.
+  </div>
+
+      `    ,
+
+      aboutus: `
+        <h2>عن النظام </h2>
+        <p>تم بناءالتطبيق باحدث الخوارزميات البرمجية والتصميم التفاعلى المميز بالتعاون بين:</p>
+        <h3>أولًا: اللجنة الفنية والمعلومات </h3>
+        <ul>
+          <li>ا.د. فضل هاشم -مركز معلومات تغير المناخ </li>
+          <li>ا.د. مريم حزمان -مركز معلومات تغير المناخ </li>
+        </ul>
+
+        <h3>ثانيًا: البرمجةوالتصميم</h3>
+        <ul>
+          <li> د. ايمن محمد -مركز معلومات تغير المناخ aymanada@gmail.com </li>
+          <li>  يوسف ايمن yous102008@gmail.com</li>
+        </ul>
+       
+      `
+    };
+
+    
+    // تحميل القسم مع عرض شاشة التحميل
+    function loadSection(key) {
+      const contentDiv = document.getElementById("dynamic-content");
+      
+      // عرض شاشة التحميل الداخلية
+      contentDiv.innerHTML = `
+        <div class="section-loader">
+          <div class="spinner"></div>
+          <div class="text">جاري تحميل المحتوى...</div>
+        </div>
+      `;
+/*accordion*/
+ // اختر جميع الأزرار في الـ accordion
+   
+    const headers = document.querySelectorAll('.accordion-header');
+
+    headers.forEach(header => {
+      header.addEventListener('click', function () {
+        // تبديل الفئة النشطة
+        this.classList.toggle('active');
+
+        // عرض أو إخفاء المحتوى
+        const content = this.nextElementSibling;
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+
+        // إغلاق باقي العناصر (اختياري: لجعل واحد فقط مفتوحًا)
+        headers.forEach(h => {
+          if (h !== header) {
+            h.classList.remove('active');
+            h.nextElementSibling.style.maxHeight = null;
+          }
+        });
+      });
+    });
+      // تحميل المحتوى بعد تأخير بسيط
+      setTimeout(() => {
+        contentDiv.innerHTML = sections[key] || "<p>لم يتم العثور على المحتوى.</p>";
+        closeSidebar(); // إغلاق القائمة في الجوال
+      }, 300);
+     
+    }
+
+    // فتح/إغلاق القائمة في الجوال
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+      document.getElementById("overlay").classList.toggle("active");
+    }
+
+    function closeSidebar() {
+      document.getElementById("sidebar").classList.remove("active");
+      document.getElementById("overlay").classList.remove("active");
+    }
+
+    // إخفاء شاشة التحميل الأولية
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('loader');
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+      }, 500);
+      setTimeout(() => {
+        loader.style.display = 'none';
+      }, 1000);
+    });
+
+    // تحميل الصفحة الرئيسية عند البدء
+    window.onload = function() {
+      loadSection('home');
+    };
+
+    // تفعيل الوضع الداكن
+    document.getElementById('darkModeToggle').addEventListener('click', function () {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      this.textContent = isDark ? '☀️ فاتح' : '🌙 داكن';
+    });
+ 
+  // Database of crops with required conditions and storage duration
+  const cropData = [
+    { crop: "الموز", temp: 14, humidityMin: 85, humidityMax: 90, storage: "7 - 28 يوم" },
+    { crop: "الليمون", temp: 13, humidityMin: 85, humidityMax: 90, storage: "30 - 120 يوم" },
+    { crop: "المانجو", temp: 12, humidityMin: 85, humidityMax: 90, storage: "14 - 28 يوم" },
+    { crop: "الجوافة", temp: 10, humidityMin: 85, humidityMax: 90, storage: "14 - 21 يوم" },
+    { crop: "اليوسفى", temp: 7, humidityMin: 85, humidityMax: 90, storage: "14 - 28 يوم" },
+    { crop: "البرتقال", temp: 5, humidityMin: 85, humidityMax: 90, storage: "21 - 65 يوم" },
+    { crop: "التفاح المستورد", temp: 4, humidityMin: 90, humidityMax: 95, storage: "45 - 90 يوم" },
+    { crop: "التفاح البلدى", temp: 0, humidityMin: 90, humidityMax: 95, storage: "14 - 28 يوم" },
+    { crop: "التين", temp: 0, humidityMin: 90, humidityMax: 95, storage: "7 - 10 يوم" },
+    { crop: "البلح الطازج", temp: 0, humidityMin: 90, humidityMax: 95, storage: "21 - 35 يوم" },
+    { crop: "الخوخ", temp: 0, humidityMin: 90, humidityMax: 95, storage: "7 - 24 يوم" },
+    { crop: "العنب", temp: -1, humidityMin: 90, humidityMax: 95, storage: "30 - 120 يوم" },
+    { crop: "الكمثرى", temp: -1, humidityMin: 90, humidityMax: 95, storage: "30 - 90 يوم" }
+  ];
+
+  function calculateStorage() {
+    const crop = document.getElementById("crop").value;
+    //const tempInput = parseFloat(document.getElementById("temp").value);
+    //const humidity = parseFloat(document.getElementById("humidity").value);
+    const resultDiv = document.getElementById("result");
+
+    // Reset result
+    resultDiv.innerHTML = "";
+
+    // Validation
+    if (!crop) {
+      resultDiv.innerHTML = "<p class='error'>الرجاء اختيار المحصول.</p>";
+      return;
+    }
+   /* if (isNaN(tempInput)) {
+      resultDiv.innerHTML = "<p class='error'>الرجاء إدخال درجة حرارة صحيحة.</p>";
+      return;
+    }
+    if (isNaN(humidity) || humidity < 0 || humidity > 100) {
+      resultDiv.innerHTML = "<p class='error'>الرجاء إدخال رطوبة صحيحة (0-100%).</p>";
+      return;
+    }
+*/
+    // Find matching crop
+    const match = cropData.find(item => item.crop === crop);
+
+    if (!match) {
+      resultDiv.innerHTML = "<p class='error'>لم يتم العثور على بيانات لهذا المحصول.</p>";
+      return;
+    }
+    else{
+      resultDiv.innerHTML = `
+      <strong>درجة الحرارة يجب أن تكون :</strong> ${match.temp} °م
+      <br>
+      <strong>الرطوبة يجب أن تكون بين :</strong> ${match.humidityMin} % الى ${match.humidityMax} %
+      <br>
+        <strong>الفترة المتوقعة للتخزين:</strong> ${match.storage} 
+      `;
+    }
+//<br>
+      ///  <small>تم التحقق من درجة الحرارة والرطوبة.</small>
+    // Check temperature match (accounting for exact values like 0, -1, etc.)
+    //const tempMatch = Math.abs(match.temp - tempInput) < 0.1; // Tolerance for float
+
+    // Check humidity range
+   // const humidityMatch = humidity >= match.humidityMin && humidity <= match.humidityMax;
+
+    // Show result
+   /* if (tempMatch && humidityMatch) {
+      resultDiv.innerHTML = `
+        <strong>الفترة المتوقعة للتخزين:</strong> ${match.storage}
+        <br>
+        <small>تم التحقق من درجة الحرارة والرطوبة.</small>
+      `;
+    } else {
+      let issues = [];
+      if (!tempMatch) {
+        issues.push(`درجة الحرارة يجب أن تكون ${match.temp}°م`);
+      }
+      if (!humidityMatch) {
+        issues.push(`الرطوبة يجب أن تكون بين ${match.humidityMin}% و ${match.humidityMax}%`);
+      }
+     
+      resultDiv.innerHTML = `
+        <p class='error'>لا تتطابق الظروف الحالية:</p>
+        <ul style="text-align: right; lang: ar;">${issues.map(issue => `<li>${issue}</li>`).join('')}</ul>
+        <p>الفترة المذكورة لا تنطبق في هذه الحالة.</p>
+      `;
+    }*/
+  }
+// عرض/إخفاء الشريط الجانبي (كما كان)
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('active'); // يمكنك استخدام class للتحكم في العرض
+}
+
+// عرض/إخفاء القائمة الفرعية
+function toggleSubmenu(menuId) {
+  const submenu = document.getElementById(menuId + '-submenu');
+  //submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+  if(menuId=='prices'){
+    document.getElementById("prices-submenu").style.display='block';
+    document.getElementById("marketing-submenu").style.display='none';
+    document.getElementById("storage-submenu").style.display='none';
+    document.getElementById("product-submenu").style.display='none';
+   }
+   if(menuId=='marketing'){
+    document.getElementById("prices-submenu").style.display='none';
+    document.getElementById("marketing-submenu").style.display='block';
+    document.getElementById("storage-submenu").style.display='none';
+    document.getElementById("product-submenu").style.display='none';
+   }
+   if(menuId=='storage'){
+    document.getElementById("prices-submenu").style.display='none';
+    document.getElementById("marketing-submenu").style.display='none';
+    document.getElementById("storage-submenu").style.display='block';
+    document.getElementById("product-submenu").style.display='none';
+   }
+   if(menuId=='product'){
+    document.getElementById("prices-submenu").style.display='none';
+    document.getElementById("marketing-submenu").style.display='none';
+    document.getElementById("storage-submenu").style.display='none';
+    document.getElementById("product-submenu").style.display='block';
+   }
+}
+</script>
+<script> function showDiv(key) {
+      //alert(key);
+     //alert(key);
+     if (key == '1') {
+         document.getElementById("R1").style.display = "block";
+         document.getElementById("R2").style.display = "none";
+         document.getElementById("R3").style.display = "none";
+     }
+     if (key == '2') {
+         document.getElementById("R1").style.display = "none";
+         document.getElementById("R2").style.display = "block";
+         document.getElementById("R3").style.display = "none";
+     }
+     if (key == '3') {
+         document.getElementById("R1").style.display = "none";
+         document.getElementById("R2").style.display = "none";
+         document.getElementById("R3").style.display = "block";
+     }
+ };
+     </script>
+       <script>
+    // Get all rows
+    const rows = document.querySelectorAll('tbody tr');
+
+    // Attach event listeners to all editable inputs
+    document.querySelectorAll('.editable').forEach(input => {
+      input.addEventListener('input', calculateAll);
+    });
+
+    function calculateAll() {
+      const rows = document.querySelectorAll('tbody tr');
+      let totalCost = 0;
+      let totalRevenue = 0;
+      let fixedCost = 12000; // First row is fixed cost (rent)
+      let variableCost = 0;
+
+      // Loop through cost and revenue rows (first 11 are costs, next 2 are revenues)
+     for (let i = 0; i < rows.length - 7; i++) { // exclude summary rows
+        const row = rows[i];
+        const qtyInput = row.querySelector('.qty');
+        const priceInput = row.querySelector('.price');
+        const displayCell = row.querySelector('.cost, .revenue');
+
+        if (!qtyInput || !priceInput) continue;
+
+        const qty = parseFloat(qtyInput.value) || 0;
+        const price = parseFloat(priceInput.value) || 0;
+        const total = qty * price;
+
+        displayCell.textContent = total.toFixed(0);
+
+        if (i < 11) { // Costs (first 11 rows)
+          totalCost += total;
+          if (i === 0) {
+            // Rent is fixed
+          } else {
+            variableCost += total;
+          }
+        } else { // Revenues (next 2 rows)
+          totalRevenue += total;
+        }
+      }
+
+      // Update summary values
+   
+      fixedCost=parseFloat(document.getElementById('qty1').value)* parseFloat(document.getElementById('price1').value);
+      variableCost=parseFloat(document.getElementById('qty2').value)* parseFloat(document.getElementById('price2').value)+parseFloat(document.getElementById('qty3').value)* parseFloat(document.getElementById('price3').value)+parseFloat(document.getElementById('qty4').value)* parseFloat(document.getElementById('price4').value);
+      variableCost +=parseFloat(document.getElementById('qty5').value)* parseFloat(document.getElementById('price5').value)+parseFloat(document.getElementById('qty6').value)* parseFloat(document.getElementById('price6').value)+parseFloat(document.getElementById('qty7').value)* parseFloat(document.getElementById('price7').value);
+     variableCost += parseFloat(document.getElementById('qty8').value)* parseFloat(document.getElementById('price8').value)+parseFloat(document.getElementById('qty9').value)* parseFloat(document.getElementById('price9').value)+parseFloat(document.getElementById('qty10').value)* parseFloat(document.getElementById('price10').value);
+      variableCost += parseFloat(document.getElementById('qty11').value)* parseFloat(document.getElementById('price11').value);
+     totalCost=fixedCost + variableCost;
+     totalRevenue=parseFloat(document.getElementById('qty12').value)* parseFloat(document.getElementById('price12').value)+parseFloat(document.getElementById('qty13').value)* parseFloat(document.getElementById('price13').value);
+      const netProfit = totalRevenue - totalCost;
+      const efficiencyRatio = totalCost > 0 ? totalRevenue / totalCost : 0;
+      const returnPerPound = efficiencyRatio - 1;
+      document.getElementById('fixedCost').textContent = fixedCost.toFixed(0);
+      document.getElementById('variableCost').textContent = variableCost.toFixed(0);
+      document.getElementById('totalCost').textContent = totalCost.toFixed(0);
+      document.getElementById('totalRevenue').textContent = totalRevenue.toFixed(0);
+      document.getElementById('netProfit').textContent = netProfit.toFixed(0);
+      document.getElementById('efficiencyRatio').textContent = efficiencyRatio.toFixed(4);
+      document.getElementById('returnPerPound').textContent = returnPerPound.toFixed(4);
+ 
+      // Cost per unit (based on main production quantity * unit price)
+      //const mainProdQty = parseFloat(rows[11].querySelector('.qty').value) || 1; // row 12 is main production
+      const mainProdQty = parseFloat(document.getElementById('qty12').value) || 1; // row 12 is main production
+      const costPerUnit = totalCost / mainProdQty;
+      document.getElementById('costPerUnit').textContent = costPerUnit.toFixed(0);
+    }
+
+    // Initialize on load
+   // calculateAll();
+  </script>
+     <script>
+    /*function calculateFinancial() {
+      // 1. التكاليف الاستثمارية
+      const land = parseFloat(document.getElementById('land').value) || 0;
+      const buildings = parseFloat(document.getElementById('buildings').value) || 0;
+      const machinery = parseFloat(document.getElementById('machinery').value) || 0;
+      const setup = parseFloat(document.getElementById('setup').value) || 0;
+      const operatingCostAnnual = parseFloat(document.getElementById('operatingCostAnnual').value) || 0;
+
+      const totalAssets = land + buildings + machinery;
+      const workingCapital = operatingCostAnnual / 12;
+      const investmentBase = totalAssets + setup + workingCapital;
+      const reserve = 0.1 * investmentBase;
+      const totalInvestment = investmentBase + reserve;
+
+      // 2. تكاليف التشغيل
+      const rawMaterials = parseFloat(document.getElementById('rawMaterials').value) || 0;
+      const electricity = parseFloat(document.getElementById('electricity').value) || 0;
+      const water = parseFloat(document.getElementById('water').value) || 0;
+      const fuel = parseFloat(document.getElementById('fuel').value) || 0;
+      const rent = parseFloat(document.getElementById('rent').value) || 0;
+      const maintenance = parseFloat(document.getElementById('maintenance').value) || 0;
+      const insuranceAssets = parseFloat(document.getElementById('insuranceAssets').value) || 0;
+      const packaging = parseFloat(document.getElementById('packaging').value) || 0;
+      const otherExpenses = parseFloat(document.getElementById('otherExpenses').value) || 0;
+
+      const operatingExpenses = rawMaterials + electricity + water + fuel + rent + maintenance + insuranceAssets + packaging + otherExpenses;
+      const wages = parseFloat(document.getElementById('wages').value) || 0;
+      const workerInsurance = parseFloat(document.getElementById('workerInsurance').value) || 0;
+      const totalOperatingCost = operatingExpenses + wages + workerInsurance;
+
+      // 3. الإيرادات
+      const revenuePrimary = parseFloat(document.getElementById('revenuePrimary').value) || 0;
+      const revenueSecondary = parseFloat(document.getElementById('revenueSecondary').value) || 0;
+      const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+      const totalRevenue = revenuePrimary + revenueSecondary + otherIncome;
+
+      // 4. الاهلاكات
+      const salvageValue = parseFloat(document.getElementById('salvageValue').value) || 0;
+      const usefulLife = parseFloat(document.getElementById('usefulLife').value) || 1;
+      const depreciation = usefulLife > 0 ? (machinery - salvageValue) / usefulLife : 0;
+
+      // 5. بيانات إضافية
+      const taxes = parseFloat(document.getElementById('taxes').value) || 0;
+      const loanInterest = parseFloat(document.getElementById('loanInterest').value) || 0;
+
+      // 6. التدفقات النقدية وتحليل العائد
+      const cashFlow = totalRevenue - totalOperatingCost;
+      const payback = cashFlow > 0 ? (totalInvestment / cashFlow).toFixed(2) : "غير محدد";
+
+      const netProfit = totalRevenue - totalOperatingCost - depreciation;
+      const srr = totalInvestment > 0 ? (((netProfit - taxes + loanInterest) / totalInvestment) * 100).toFixed(2) : 0;
+
+      // عرض النتائج
+      document.getElementById('totalAssets').textContent = totalAssets.toLocaleString();
+      document.getElementById('workingCapital').textContent = workingCapital.toFixed(2);
+      document.getElementById('reserve').textContent = reserve.toFixed(2);
+      document.getElementById('totalInvestment').textContent = totalInvestment.toLocaleString();
+
+      document.getElementById('operatingExpenses').textContent = operatingExpenses.toLocaleString();
+      document.getElementById('totalOperatingCost').textContent = totalOperatingCost.toLocaleString();
+
+      document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString();
+      document.getElementById('depreciation').textContent = depreciation.toFixed(2);
+      document.getElementById('cashFlow').textContent = cashFlow.toLocaleString();
+      document.getElementById('payback').textContent = payback;
+      document.getElementById('netProfit').textContent = netProfit.toLocaleString();
+      document.getElementById('srr').textContent = srr;
+
+      // إظهار النتائج
+      document.getElementById('results2').style.display = 'block';
+    }
+*/
+    // يمكنك دمج هذه الدالة مع نظام loadSection
+    //function loadSection(sectionId) {
+      // إخفاء كل المحتويات
+     // document.querySelectorAll('.page').forEach(page => {
+      //  page.style.display = 'none';
+      //});
+      // عرض الصفحة المطلوبة
+      //const page = document.getElementById(sectionId + '-page');
+      //if (page) page.style.display = 'block';
+    //}
+  </script>
+
+</body>
+</html>
